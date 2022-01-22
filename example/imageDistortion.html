@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Distortion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #fff;
+        }
+        .container {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .container .block {
+            position: relative;
+            background: url(images/beach.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const width = document.body.clientWidth;
+        const height = document.body.clientHeight;
+        const min = Math.min(width, height);
+        const length = `${min}px`;
+        const blockLength = `${min / 20}px`;
+
+        const container = document.querySelector('.container');
+        container.style.width = length;
+        container.style.height = length;
+
+        for (let i = 0; i < 400; i++) {
+            const block = document.createElement('div');
+            block.classList.add('block');
+            block.style.width = blockLength;
+            block.style.height = blockLength;
+            container.appendChild(block);
+        }
+
+        const block = document.querySelectorAll('.block');
+        const animation = anime.timeline({
+            targets: block,
+            easing: 'easeInOutExpo',
+            loop: true,
+            delay: anime.stagger(10, { start: 50 }),
+        });
+
+        animation
+            .add({
+                scale: 0,
+                translateX: function() {
+                    return anime.random(360, 2100)
+                },
+                translateY: function() {
+                    return anime.random(360, -2100)
+                },
+                rotate: function() {
+                    return anime.random(-360, 360)
+                },
+                duration: function() {
+                    return anime.random(500, 3000)
+                }
+            })
+            .add({
+                scale: 1,
+                translateX: 0,
+                translateY: 0,
+                rotate: 0,
+                duration: function() {
+                    return anime.random(500, 3000)
+                }
+            });
+    </script>
+</body>
+</html>
